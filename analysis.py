@@ -236,8 +236,10 @@ def chart_integration_lift(df: pd.DataFrame) -> None:
     colors = [DG_GREY, DG_GREY, DG_INK, DG_GREEN]
     bars = ax.bar(order, rates, color=colors)
     for bar, rate, count in zip(bars, rates, counts):
+        # Show extra precision for sub-1% bars so the lift math reconciles
+        rate_label = f"{rate:.3f}%" if rate < 1 else f"{rate:.1f}%"
         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.25,
-                f"{rate:.1f}%\nn={count:,}", ha="center", fontsize=10, color=DG_INK)
+                f"{rate_label}\nn={count:,}", ha="center", fontsize=10, color=DG_INK)
     ax.set_ylabel("Purchase rate (%)")
     ax.set_ylim(0, max(rates) * 1.25)
     ax.set_title("SDK adoption is the killer feature: 282× conversion lift over no integration",
